@@ -55,111 +55,38 @@
       </h2>
       <p class="text-sm text-slate-400 mb-6">Upload a photo or take a picture of fresh or diseased produce to run instant visual health diagnostic.</p>
 
-      <!-- Dropzone / Image Preview -->
-      <div id="dropzone" class="relative border-2 border-dashed border-slate-600 hover:border-emerald-500 transition-colors rounded-xl p-6 text-center cursor-pointer bg-slate-900/50 min-h-[220px] flex flex-col items-center justify-center group overflow-hidden">
+      <!-- Dropzone / Image Preview wrapper -->
+      <div class="relative">
+        <!-- Hidden real file input -->
         <input type="file" id="fileInput" accept="image/*" class="hidden">
-        
-        <!-- Preview Container -->
-        <div id="previewContainer" class="hidden w-full flex flex-col items-center">
-          <div class="relative max-h-72 rounded-lg overflow-hidden border border-slate-700 shadow-md">
-            <img id="imagePreview" src="" alt="Produce preview" class="max-h-72 object-contain rounded-lg">
-            <button id="clearBtn" class="absolute top-2 right-2 bg-slate-900/80 hover:bg-red-600 text-white p-2 rounded-full text-xs transition-colors backdrop-blur">
-              <i class="fa-solid fa-xmark"></i>
-            </button>
-          </div>
-        </div>
 
-        <!-- Initial Placeholder -->
-        <div id="placeholderUI" class="space-y-3">
-          <div class="w-16 h-16 bg-slate-800 text-slate-400 rounded-2xl flex items-center justify-center mx-auto group-hover:scale-105 group-hover:bg-emerald-500/10 group-hover:text-emerald-400 transition-all border border-slate-700">
-            <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
+        <!-- Clickable Dropzone Container -->
+        <div id="dropzone" class="border-2 border-dashed border-slate-600 hover:border-emerald-500 transition-colors rounded-xl p-6 text-center cursor-pointer bg-slate-900/50 min-h-[220px] flex flex-col items-center justify-center group overflow-hidden">
+          
+          <!-- Preview Container -->
+          <div id="previewContainer" class="hidden w-full flex flex-col items-center">
+            <div class="relative max-h-72 rounded-lg overflow-hidden border border-slate-700 shadow-md">
+              <img id="imagePreview" src="" alt="Produce preview" class="max-h-72 object-contain rounded-lg">
+              <button id="clearBtn" type="button" class="absolute top-2 right-2 bg-slate-900/80 hover:bg-red-600 text-white p-2 rounded-full text-xs transition-colors backdrop-blur z-20">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
           </div>
-          <div>
-            <p class="text-sm font-medium text-slate-200">Click or drag & drop produce photo here</p>
-            <p class="text-xs text-slate-400 mt-1">Supports JPG, PNG, WEBP</p>
+
+          <!-- Initial Placeholder -->
+          <div id="placeholderUI" class="space-y-3 pointer-events-none">
+            <div class="w-16 h-16 bg-slate-800 text-slate-400 rounded-2xl flex items-center justify-center mx-auto group-hover:scale-105 group-hover:bg-emerald-500/10 group-hover:text-emerald-400 transition-all border border-slate-700">
+              <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-slate-200">Click or drag & drop produce photo here</p>
+              <p class="text-xs text-slate-400 mt-1">Supports JPG, PNG, WEBP</p>
+            </div>
           </div>
+
         </div>
       </div>
 
       <!-- Action Controls -->
       <div class="mt-4 flex flex-wrap gap-3">
-        <button id="uploadBtn" class="flex-1 bg-slate-700 hover:bg-slate-600 text-slate-200 py-2.5 px-4 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-all">
-          <i class="fa-solid fa-folder-open"></i> Choose Image
-        </button>
-        <button id="reScanBtn" class="hidden bg-emerald-600 hover:bg-emerald-500 text-white py-2.5 px-6 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-600/20">
-          <i class="fa-solid fa-rotate-right"></i> Re-analyze Photo
-        </button>
-      </div>
-    </section>
-
-    <!-- Scanning Loading State -->
-    <div id="loadingUI" class="hidden bg-slate-800/80 border border-slate-700 rounded-2xl p-8 text-center space-y-4 shadow-xl">
-      <div class="loader-ring mx-auto"></div>
-      <div>
-        <h3 class="text-base font-semibold text-white">Analyzing Produce Condition...</h3>
-        <p class="text-xs text-slate-400 mt-1">Checking for fungal lesions, gray mold, necrosis, bacterial spots, and spoilage risks.</p>
-      </div>
-    </div>
-
-    <!-- Error Display -->
-    <div id="errorUI" class="hidden bg-red-950/40 border border-red-800/60 rounded-2xl p-5 text-red-200 text-sm flex items-start gap-3">
-      <i class="fa-solid fa-triangle-exclamation text-red-400 text-lg mt-0.5"></i>
-      <div>
-        <span class="font-semibold block mb-0.5">Analysis Failed</span>
-        <span id="errorMessage">Unable to process image. Please try again.</span>
-      </div>
-    </div>
-
-    <!-- Diagnostic Results Section -->
-    <section id="resultsSection" class="hidden bg-slate-800/80 border border-slate-700 rounded-2xl p-6 shadow-2xl space-y-6">
-      
-      <!-- Top Summary Card -->
-      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-slate-700/80">
-        <div>
-          <div class="flex items-center gap-3">
-            <h2 id="produceTitle" class="text-2xl font-bold text-white">--</h2>
-            <span id="safetyBadge" class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">--</span>
-          </div>
-          <p id="conditionSummary" class="text-sm text-slate-300 mt-1">--</p>
-        </div>
-        <div class="bg-slate-900/60 px-4 py-3 rounded-xl border border-slate-700 text-right">
-          <span class="text-xs text-slate-400 block font-medium">Confidence Score</span>
-          <span id="confidenceVal" class="text-xl font-bold text-emerald-400">--%</span>
-        </div>
-      </div>
-
-      <!-- Detail Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        
-        <!-- Detected Symptoms -->
-        <div class="bg-slate-900/40 p-4 rounded-xl border border-slate-700/60">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-2">
-            <i class="fa-solid fa-magnifying-glass text-emerald-400"></i> Visual Symptoms Observed
-          </h3>
-          <p id="symptomsText" class="text-sm text-slate-200 leading-relaxed">--</p>
-        </div>
-
-        <!-- Pathogen / Disease Cause -->
-        <div class="bg-slate-900/40 p-4 rounded-xl border border-slate-700/60">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-2">
-            <i class="fa-solid fa-microscope text-emerald-400"></i> Identified Cause / Condition
-          </h3>
-          <p id="pathogenText" class="text-sm text-slate-200 leading-relaxed">--</p>
-        </div>
-
-      </div>
-
-      <!-- Consumption Recommendation -->
-      <div class="bg-slate-900/60 border border-slate-700 p-5 rounded-xl">
-        <h3 class="text-sm font-semibold text-white mb-2 flex items-center gap-2">
-          <i class="fa-solid fa-utensils text-emerald-400"></i> Consumption & Safety Guidance
-        </h3>
-        <p id="recommendationText" class="text-sm text-slate-300 leading-relaxed">--</p>
-      </div>
-
-    </section>
-
-  </main>
-
-  <script>
-    const dropzone = document.getElementById('dropzone');
+        <button id="uploadBtn" type="button" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white py-3 px-4 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-600/20 cursor-pointer
